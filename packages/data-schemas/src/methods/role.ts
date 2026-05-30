@@ -7,6 +7,7 @@ import {
 } from 'librechat-data-provider';
 import type { Model } from 'mongoose';
 import type { IRole, IUser } from '~/types';
+import { escapeRegExp } from '~/utils/string';
 import logger from '~/config/winston';
 
 const systemRoleValues = new Set<string>(Object.values(SystemRoles));
@@ -14,10 +15,6 @@ const systemRoleValues = new Set<string>(Object.values(SystemRoles));
 /** Case-insensitive check — the legacy roles route uppercases params. */
 function isSystemRoleName(name: string): boolean {
   return systemRoleValues.has(name.toUpperCase());
-}
-
-function escapeRegex(value: string): string {
-  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
 export class RoleConflictError extends Error {
@@ -145,7 +142,7 @@ export function createRoleMethods(mongoose: typeof import('mongoose'), deps: Rol
       const Role = mongoose.models.Role;
       let query = Role.find({
         $or: uniqueRoleNames.map((roleName) => ({
-          name: new RegExp(`^${escapeRegex(roleName)}$`, 'i'),
+          name: new RegExp(`^${escapeRegExp(roleName)}$`, 'i'),
         })),
       });
       if (fieldsToSelect) {
