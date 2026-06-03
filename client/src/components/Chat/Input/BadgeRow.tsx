@@ -25,7 +25,7 @@ import Skills from './Skills';
 import store from '~/store';
 
 interface BadgeRowProps {
-  showToolControls?: boolean;
+  showEphemeralBadges?: boolean;
   onChange: (badges: Pick<BadgeItem, 'id'>[]) => void;
   onToggle?: (badgeId: string, currentActive: boolean) => void;
   conversationId?: string | null;
@@ -142,7 +142,7 @@ const dragReducer = (state: DragState, action: DragAction): DragState => {
 };
 
 function BadgeRow({
-  showToolControls,
+  showEphemeralBadges,
   conversationId,
   specName,
   isSubmitting,
@@ -329,7 +329,7 @@ function BadgeRow({
       isSubmitting={isSubmitting}
     >
       <div ref={containerRef} className="relative flex flex-wrap items-center gap-2">
-        {showToolControls === true && <ToolsDropdown />}
+        {showEphemeralBadges === true && <ToolsDropdown />}
         {tempBadges.map((badge, index) => (
           <React.Fragment key={badge.id}>
             {dragState.draggedBadge && dragState.insertIndex === index && ghostBadge && (
@@ -369,7 +369,7 @@ function BadgeRow({
             />
           </div>
         )}
-        {showToolControls === true && (
+        {showEphemeralBadges === true && (
           <>
             <WebSearch />
             <CodeInterpreter />
